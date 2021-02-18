@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
 	t1 = time(NULL);
 
-	printf("Reading edge list from file %s\n", argv[1]);
+	printf("Loading edge list from file %s\n", argv[1]);
 
 	g1 = read_edgelist(argv[1]);
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
 	t1 = time(NULL);
 
-	printf("Reading edge list from file %s\n", argv[1]);
+	printf("Loading adjacency list from file %s\n", argv[1]);
 	
 	g2 = read_adjlist(argv[1]);
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
 	t1 = time(NULL);
 
-	printf("Reading edge list from file %s\n", argv[1]);
+	printf("Loading adjacency matrix from file %s\n", argv[1]);
 
 	g3 = read_adjmatrix(argv[1]);
 
