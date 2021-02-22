@@ -11,11 +11,12 @@ struct element {
 
 typedef struct {
     element *first;
+    element *last;
+    unsigned long n_elements;
 } fifo;
 
 fifo* queue_alloc();
 bool is_empty(fifo* queue);
-element* get_last(fifo* queue);
 void enqueue(unsigned long value, fifo* queue);
 unsigned long dequeue(fifo* queue);
 void free_queue(fifo* queue);
