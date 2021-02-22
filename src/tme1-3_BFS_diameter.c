@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
 
-    printf("Computing diameter lower bound with %u searches...", n_times);
+    printf("Computing diameter lower bound with %u searches...\n", n_times);
     t1 = time(NULL);
     diam = BFS_diameter(g, n_times);
     t2 = time(NULL);
