@@ -9,6 +9,8 @@ int main(int argc, char** argv) {
 	adjmatrix* g3;
 	time_t t1, t2;
 
+	// Read graph as an edge list
+
 	t1 = time(NULL);
 
 	printf("Loading edge list from file %s\n", argv[1]);
@@ -23,6 +25,8 @@ int main(int argc, char** argv) {
 	t2 = time(NULL);
 
 	printf("- Overall time = %llds\n", (t2-t1)%60);
+
+	// Read graph as an adjacency list
 
 	t1 = time(NULL);
 
@@ -42,6 +46,8 @@ int main(int argc, char** argv) {
 
 	printf("- Overall time = %llds\n", (t2-t1)%60);
 
+	// Read graph as an adjacency matrix
+
 	t1 = time(NULL);
 
 	printf("Loading adjacency matrix from file %s\n", argv[1]);
@@ -52,7 +58,7 @@ int main(int argc, char** argv) {
 	printf("Number of edges: %lu\n", g3->e);
 
 	printf("Building the adjacency matrix\n");
-	mkmatrix(g3);
+	mkmatrix(g3); //this will surely crash unless the graph is small
 	
 	free_adjmatrix(g3);
 
