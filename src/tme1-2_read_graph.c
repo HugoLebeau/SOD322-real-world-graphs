@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
 	t2 = time(NULL);
 
-	printf("- Overall time = %llds\n", (t2-t1)%60);
+	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
 
 	// Read graph as an adjacency list
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
 	t2 = time(NULL);
 
-	printf("- Overall time = %llds\n", (t2-t1)%60);
+	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
 
 	// Read graph as an adjacency matrix
 
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 
 	t2 = time(NULL);
 
-	printf("- Overall time = %llds\n", (t2-t1)%60);
+	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
 
 	return 0;
 }
