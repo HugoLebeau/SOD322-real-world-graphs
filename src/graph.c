@@ -1,15 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include "graph.h"
 
-//compute the maximum of three unsigned long
+// Compute the maximum of three unsigned long
 unsigned long max3(unsigned long a, unsigned long b, unsigned long c) {
 	a = (a > b) ? a : b;
 	return (a > c) ? a : c;
 }
 
-//read an edge list from file
+// Read an edge list from file
 edgelist* read_edgelist(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input, "r");
@@ -39,7 +38,7 @@ void free_edgelist(edgelist* g) {
 	free(g);
 }
 
-//read an edge list from file
+// Read an edge list from file
 adjlist* read_adjlist(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input,"r");
@@ -64,7 +63,7 @@ adjlist* read_adjlist(char* input) {
 	return g;
 }
 
-//build an adjacency list
+// Build an adjacency list
 void mkadjlist(adjlist* g) {
 	unsigned long i, u, v;
 	unsigned long *d = calloc(g->n, sizeof(unsigned long));
@@ -99,7 +98,7 @@ void free_adjlist(adjlist* g) {
 	free(g);
 }
 
-//read an edgelist from file
+// Read an edgelist from file
 adjmatrix* read_adjmatrix(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input,"r");
@@ -124,7 +123,7 @@ adjmatrix* read_adjmatrix(char* input) {
 	return g;
 }
 
-//build an adjacency matrix
+// Build an adjacency matrix
 void mkmatrix(adjmatrix* g) {
 	unsigned long i, u, v;
 	g->mat = calloc(g->n*g->n, sizeof(bool));

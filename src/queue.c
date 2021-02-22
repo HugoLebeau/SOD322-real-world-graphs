@@ -8,6 +8,11 @@ fifo* queue_alloc() {
     return queue;
 }
 
+bool is_empty(fifo* queue) {
+    return (queue->first ? false : true);
+}
+
+// Get the last element of a queue
 element* get_last(fifo* queue) {
     element *curr = queue->first;
     if (!curr) return NULL;
@@ -17,7 +22,8 @@ element* get_last(fifo* queue) {
     return curr;
 }
 
-void enqueue(int value, fifo* queue) {
+// Add an element at the end of a queue
+void enqueue(unsigned long value, fifo* queue) {
     element *last = get_last(queue);
     if (last) {
         last->next = malloc(sizeof(element*));
@@ -31,6 +37,7 @@ void enqueue(int value, fifo* queue) {
     }
 }
 
+// Get and remove the first element of a queue
 unsigned long dequeue(fifo* queue) {
     element *first = queue->first;
     if (!first) {

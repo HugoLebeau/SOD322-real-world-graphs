@@ -4,9 +4,9 @@
 #include "graph.h"
 
 int main(int argc, char** argv) {
-	edgelist* g1;
-	adjlist* g2;
-	adjmatrix* g3;
+	edgelist *g1;
+	adjlist *g2;
+	adjmatrix *g3;
 	time_t t1, t2;
 
 	// Read graph as an edge list
