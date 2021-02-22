@@ -9,6 +9,8 @@ int main(int argc, char** argv) {
     unsigned long diam;
     unsigned int n_times = 100;
 
+    printf("File: \"%s\".\n", argv[1]);
+
     printf("Loading graph as an adjacency list...\n");
     t1 = time(NULL);
     adjlist *g = read_adjlist(argv[1]);
