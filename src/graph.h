@@ -41,6 +41,7 @@ void free_edgelist(edgelist* g);
 
 adjlist* read_adjlist(char* input);
 void mkadjlist(adjlist* g);
+void sort_neighbors(adjlist* g);
 void free_adjlist(adjlist* g);
 
 adjmatrix* read_adjmatrix(char* input);

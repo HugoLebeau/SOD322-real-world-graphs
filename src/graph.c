@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "graph.h"
+#include "misc.h"
 
 // Compute the maximum of three unsigned long
 unsigned long max3(unsigned long a, unsigned long b, unsigned long c) {
@@ -68,20 +69,20 @@ void mkadjlist(adjlist* g) {
 	unsigned long i, u, v;
 	unsigned long *d = calloc(g->n, sizeof(unsigned long));
 
-	for (i=0; i<g->e; i++) {
+	for (i = 0; i < g->e; i++) {
 		d[g->edges[i].s]++;
 		d[g->edges[i].t]++;
 	}
 
 	g->cd = malloc((g->n+1)*sizeof(unsigned long));
 	g->cd[0] = 0;
-	for (i=1; i<g->n+1; i++) {
+	for (i = 1; i < g->n+1; i++) {
 		g->cd[i] = g->cd[i-1]+d[i-1];
 		d[i-1] = 0;
 	}
 
 	g->adj = malloc(2*g->e*sizeof(unsigned long));
-	for (i=0; i<g->e; i++) {
+	for (i = 0; i < g->e; i++) {
 		u = g->edges[i].s;
 		v = g->edges[i].t;
 		g->adj[g->cd[u]+d[u]++] = v;
@@ -89,6 +90,13 @@ void mkadjlist(adjlist* g) {
 	}
 
 	free(d);
+}
+
+void sort_neighbors(adjlist* g) {
+	unsigned long i;
+	for (i = 0; i < g->n; i++) {
+		quicksort(g->adj, g->cd[i], g->cd[i+1]-1);
+	}
 }
 
 void free_adjlist(adjlist* g) {
@@ -127,7 +135,7 @@ adjmatrix* read_adjmatrix(char* input) {
 void mkmatrix(adjmatrix* g) {
 	unsigned long i, u, v;
 	g->mat = calloc(g->n*g->n, sizeof(bool));
-	for (i=0; i<g->e; i++) {
+	for (i = 0; i < g->e; i++) {
 		u = g->edges[i].s;
 		v = g->edges[i].t;
 		g->mat[u+g->n*v] = 1;
