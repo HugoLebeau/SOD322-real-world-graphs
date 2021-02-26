@@ -95,7 +95,7 @@ void mkadjlist(adjlist* g) {
 void sort_neighbors(adjlist* g) {
 	unsigned long i;
 	for (i = 0; i < g->n; i++) {
-		quicksort(g->adj, g->cd[i], g->cd[i+1]-1);
+		if (g->cd[i+1] > g->cd[i]) quicksort(g->adj, g->cd[i], g->cd[i+1]-1);
 	}
 }
 
