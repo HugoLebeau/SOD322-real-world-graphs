@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "graph.h"
 #include "algorithms.h"
 
 int main(int argc, char** argv) {
+    adjlist *g;
     time_t t1, t2;
     unsigned long diam;
     unsigned int n_times = 100;
@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 
     printf("Loading graph as an adjacency list...\n");
     t1 = time(NULL);
-    adjlist *g = read_adjlist(argv[1]);
+    g = read_adjlist(argv[1]);
     mkadjlist(g);
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
