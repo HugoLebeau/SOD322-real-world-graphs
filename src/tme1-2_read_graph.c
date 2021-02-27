@@ -9,62 +9,30 @@ int main(int argc, char** argv) {
 	adjmatrix *g3;
 	time_t t1, t2;
 
-	// Read graph as an edge list
-
+	printf("File: \"%s\".\n", argv[1]);
+	
+	printf("Loading graph as an edge list...\n");
 	t1 = time(NULL);
-
-	printf("Loading edge list from file %s\n", argv[1]);
-
 	g1 = read_edgelist(argv[1]);
-
-	printf("Number of nodes: %lu\n", g1->n);
-	printf("Number of edges: %lu\n", g1->e);
-
+	t2 = time(NULL);
+	printf("Done. Time: %lus.\nNumber of nodes: %lu.\nNumber of edges: %lu.\n", (unsigned long) difftime(t2, t1), g1->n, g1->e);
 	free_edgelist(g1);
-
-	t2 = time(NULL);
-
-	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
-
-	// Read graph as an adjacency list
-
-	t1 = time(NULL);
-
-	printf("Loading adjacency list from file %s\n", argv[1]);
 	
+	printf("Loading graph as an adjacency list...\n");
+	t1 = time(NULL);
 	g2 = read_adjlist(argv[1]);
-
-	printf("Number of nodes: %lu\n", g2->n);
-	printf("Number of edges: %lu\n", g2->e);
-
-	printf("Building the adjacency list\n");
 	mkadjlist(g2);
-	
+	t2 = time(NULL);
+	printf("Done. Time: %lus.\nNumber of nodes: %lu.\nNumber of edges: %lu.\n", (unsigned long) difftime(t2, t1), g2->n, g2->e);
 	free_adjlist(g2);
-
-	t2 = time(NULL);
-
-	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
-
-	// Read graph as an adjacency matrix
-
-	t1 = time(NULL);
-
-	printf("Loading adjacency matrix from file %s\n", argv[1]);
-
-	g3 = read_adjmatrix(argv[1]);
-
-	printf("Number of nodes: %lu\n", g3->n);
-	printf("Number of edges: %lu\n", g3->e);
-
-	printf("Building the adjacency matrix\n");
-	mkmatrix(g3); //this will surely crash unless the graph is small
 	
-	free_adjmatrix(g3);
-
+	printf("Loading graph as an adjacency matrix...\n");
+	t1 = time(NULL);
+	g3 = read_adjmatrix(argv[1]);
+	mkmatrix(g3); //this will surely crash unless the graph is small
 	t2 = time(NULL);
-
-	printf("- Overall time = %lus\n", (unsigned long) difftime(t2, t1));
+	printf("Done. Time: %lus.\nNumber of nodes: %lu.\nNumber of edges: %lu.\n", (unsigned long) difftime(t2, t1), g3->n, g3->e);
+	free_adjmatrix(g3);
 
 	return 0;
 }
