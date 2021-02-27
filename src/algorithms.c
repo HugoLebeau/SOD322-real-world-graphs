@@ -41,7 +41,7 @@ unsigned long BFS_diameter(adjlist* g, unsigned int n_times) {
 }
 
 // List all triangles of a graph
-unsigned long list_triangles(adjlist* g, unsigned long* triangles) {
+unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles) {
     unsigned long *ctd = malloc((g->n+1)*sizeof(unsigned long)); //cumulative truncated degree
     unsigned long *tsl = malloc(2*g->e*sizeof(unsigned long)); //concatenated truncated list of neighbors of all nodes
     unsigned long u;
@@ -58,17 +58,23 @@ unsigned long list_triangles(adjlist* g, unsigned long* triangles) {
         if (ctd[u+1]-ctd[u] > max_d) max_d = ctd[u+1]-ctd[u];
     }
     tsl = realloc(tsl, k*sizeof(unsigned long));
-    // tri ?
     unsigned long v;
     unsigned long e;
-    unsigned long t = 0, n_triangles = 0;
+    unsigned long t = 0;
+    unsigned long maxt = 3*NTRIANGLES;
+    unsigned long *triangles = malloc(maxt*sizeof(unsigned long));
     unsigned long *W = malloc(max_d*sizeof(unsigned long));
+    *n_triangles = 0;
     for (e = 0; e < g->e; e++) {
         u = g->edges[e].s;
         v = g->edges[e].t;
         intersection(tsl+ctd[u], ctd[u+1]-ctd[u], tsl+ctd[v], ctd[v+1]-ctd[v], W, &k);
-        n_triangles += k;
+        *n_triangles += k;
         for (i = 0; i < k; i++) {
+            if (t+3 > maxt) {
+                maxt += 3*NTRIANGLES;
+                triangles = realloc(triangles, maxt*sizeof(unsigned long));
+            }
             triangles[t+0] = u;
             triangles[t+1] = v;
             triangles[t+2] = W[i];
@@ -76,5 +82,6 @@ unsigned long list_triangles(adjlist* g, unsigned long* triangles) {
         }
     }
     free(ctd); free(tsl); free(W);
-    return n_triangles;
+    triangles = realloc(triangles, t*sizeof(unsigned long));
+    return triangles;
 }
