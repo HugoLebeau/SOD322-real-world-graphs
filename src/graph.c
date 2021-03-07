@@ -92,6 +92,7 @@ void mkadjlist(adjlist* g) {
 	free(d);
 }
 
+// Sort the neighbors of each node by their label
 void sort_neighbors(adjlist* g) {
 	unsigned long i;
 	for (i = 0; i < g->n; i++) {
@@ -99,10 +100,18 @@ void sort_neighbors(adjlist* g) {
 	}
 }
 
+// Create a min heap with the nodes of the graph sorted by their degree
+void sort_nodes(adjlist *g) {
+	g->mh = alloc_min_heap(g->n);
+	unsigned long i;
+	for (i = 0; i < g->n; i++) insert_node(g->mh, i, g->cd[i+1]-g->cd[i]);
+}
+
 void free_adjlist(adjlist* g) {
 	free(g->edges);
 	free(g->cd);
 	free(g->adj);
+	if (g->mh) free(g->mh);
 	free(g);
 }
 
