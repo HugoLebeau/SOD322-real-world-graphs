@@ -7,5 +7,6 @@
 
 unsigned long BFS_diameter(adjlist* g, unsigned int n_times);
 unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles);
+void core_decomposition(adjlist* g, unsigned long* core_value, unsigned long* ordering);
 
 #endif

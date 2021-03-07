@@ -85,3 +85,19 @@ unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles) {
     triangles = realloc(triangles, t*sizeof(unsigned long));
     return triangles;
 }
+
+// Core decomposition of the graph
+// The min heap of the graph is supposed computed
+// core_value and core_ordering are supposed to be two arrays of size g->n
+void core_decomposition(adjlist* g, unsigned long* core_value, unsigned long* core_ordering) {
+    unsigned long i = g->n-1, c = 0;
+    node v;
+    while (g->mh->size > 0) {
+        v = extract_min(g->mh);
+        if (c < v.d) c = v.d;
+        // remove neighbors...
+        core_value[v.n] = c;
+        core_ordering[i] = v.n;
+        i--;
+    }
+}
