@@ -7,9 +7,8 @@ unsigned long max(unsigned long a, unsigned long b) {
 }
 
 // Swap two elements of an array
-void swap(unsigned long* array, unsigned long i, unsigned long j) {
-    unsigned long buffer;
-    buffer = array[i];
+void swap_lu(unsigned long* array, unsigned long i, unsigned long j) {
+    unsigned long buffer = array[i];
     array[i] = array[j];
     array[j] = buffer;
 }
@@ -20,11 +19,11 @@ unsigned long partition(unsigned long* array, unsigned long first, unsigned long
     unsigned long i = first, j;
     for (j = first; j <= last; j++) {
         if (array[j] < pivot) {
-            swap(array, i, j);
+            swap_lu(array, i, j);
             i++;
         }
     }
-    swap(array, i, last);
+    swap_lu(array, i, last);
     return i;
 }
 
