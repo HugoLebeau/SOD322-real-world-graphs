@@ -42,7 +42,7 @@ void free_edgelist(edgelist* g) {
 // Read an edge list from file
 adjlist* read_adjlist(char* input) {
 	unsigned long e1 = NLINKS;
-	FILE *file = fopen(input,"r");
+	FILE *file = fopen(input, "r");
 
 	adjlist *g = malloc(sizeof(adjlist));
 	g->n = 0;
@@ -118,7 +118,7 @@ void free_adjlist(adjlist* g) {
 // Read an edgelist from file
 adjmatrix* read_adjmatrix(char* input) {
 	unsigned long e1 = NLINKS;
-	FILE *file = fopen(input,"r");
+	FILE *file = fopen(input, "r");
 
 	adjmatrix *g = malloc(sizeof(adjmatrix));
 	g->n = 0;

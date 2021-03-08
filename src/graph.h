@@ -1,7 +1,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <stdbool.h>
 #include "min_heap.h"
 
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
