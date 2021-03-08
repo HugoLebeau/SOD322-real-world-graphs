@@ -91,11 +91,15 @@ unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles) {
 // core_value and core_ordering are supposed to be two arrays of size g->n
 void core_decomposition(adjlist* g, unsigned long* core_value, unsigned long* core_ordering) {
     unsigned long i = g->n-1, c = 0;
+    unsigned long j, neighbor;
     node v;
     while (g->mh->size > 0) {
         v = extract_min(g->mh);
         if (c < v.d) c = v.d;
-        // remove neighbors...
+        for (j = g->cd[v.n]; j < g->cd[v.n+1]; j++) {
+            neighbor = g->adj[j];
+            if (g->mh->in[neighbor]) decrease_degree(g->mh, g->mh->where[neighbor]);
+        }
         core_value[v.n] = c;
         core_ordering[i] = v.n;
         i--;
