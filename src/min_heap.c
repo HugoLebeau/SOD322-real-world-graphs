@@ -5,16 +5,21 @@
 min_heap* alloc_min_heap(unsigned long capacity) {
     min_heap *mh = malloc(sizeof(min_heap));
     mh->arr = malloc(capacity*sizeof(node));
+    mh->where = malloc(capacity*sizeof(unsigned long));
+    mh->in = calloc(capacity, sizeof(bool));
+    // Same capacity for all arrays because we consider as many nodes as labels
     mh->capacity = capacity;
     mh->size = 0;
     return mh;
 }
 
 // Swap two elements of an array
-void swap_node(node* array, unsigned long i, unsigned long j) {
-    node buffer = array[i];
-    array[i] = array[j];
-    array[j] = buffer;
+void swap_node(min_heap* mh, unsigned long i, unsigned long j) {
+    node buffer_node = mh->arr[i];
+    mh->arr[i] = mh->arr[j];
+    mh->where[mh->arr[i].n] = i;
+    mh->arr[j] = buffer_node;
+    mh->where[mh->arr[j].n] = j;
 }
 
 // Insert node (n, d) into a min heap
@@ -27,9 +32,11 @@ void insert_node(min_heap* mh, unsigned long n, unsigned long d) {
     mh->size++;
     mh->arr[i].n = n;
     mh->arr[i].d = d;
+    mh->where[n] = i;
+    mh->in[n] = true;
     int parent = (i-1)/2;
     while (i > 0 && mh->arr[parent].d > mh->arr[i].d) {
-        swap_node(mh->arr, i, parent);
+        swap_node(mh, i, parent);
          i = parent;
          parent = (i-1)/2;
     }
@@ -40,7 +47,7 @@ void decrease_degree(min_heap* mh, unsigned long i) {
     mh->arr[i].d -= 1;
     unsigned long parent = (i-1)/2;
     while (i != 0 && mh->arr[parent].d > mh->arr[i].d) {
-        swap_node(mh->arr, i, parent);
+        swap_node(mh, i, parent);
         i = parent;
         parent = (i-1)/2;
     }
@@ -57,7 +64,7 @@ void make_min_heap(min_heap* mh, unsigned long i) {
         smallest = right;
     }
     if (smallest != i) {
-        swap_node(mh->arr, i, smallest);
+        swap_node(mh, i, smallest);
         make_min_heap(mh, smallest);
     }
 }
@@ -76,13 +83,17 @@ node extract_min(min_heap* mh) {
         return mh->arr[0];
     }
     node root = mh->arr[0];
-    mh->arr[0] = mh->arr[mh->size-1];
+    mh->in[root.n] = false;
     mh->size--;
+    mh->arr[0] = mh->arr[mh->size];
+    mh->where[mh->arr[0].n] = 0;
     make_min_heap(mh, 0);
     return root;
 }
 
 void free_min_heap(min_heap *mh) {
     free(mh->arr);
+    free(mh->where);
+    free(mh->in);
     free(mh);
 }
