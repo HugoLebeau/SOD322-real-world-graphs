@@ -50,3 +50,36 @@ void intersection(unsigned long* sorted_a, unsigned long size_a, unsigned long* 
     }
     *size_inter = k;
 }
+
+sparse_matrix* alloc_sparse_matrix(unsigned long capacity, unsigned long n, unsigned long p) {
+    sparse_matrix* mat = malloc(sizeof(sparse_matrix));
+    mat->n_elems = 0;
+    mat->capacity = capacity;
+    mat->n = n;
+    mat->p = p;
+    mat->val = malloc(capacity*sizeof(unsigned long));
+    mat->pos = malloc(capacity*sizeof(unsigned long));
+    return mat;
+}
+
+void add_elem(sparse_matrix* mat, bool elem, unsigned long i, unsigned long j) {
+    mat->val[mat->n_elems] = elem;
+    mat->pos[mat->n_elems] = mat->n*i+j;
+    mat->n_elems++;
+}
+
+// Matrix vector product with a sparse matrix
+void matvecprod(sparse_matrix* mat, double* vec, double* res) {
+    unsigned long j, k;
+    for (k = 0; k < mat->p; k++) res[k] = 0;
+    for (k = 0; k < mat->n_elems; k++) {
+        j = mat->pos[k]%mat->p;
+        if (mat->val[k]) res[j] += vec[j];
+    }
+}
+
+void free_sparse_matrix(sparse_matrix* mat) {
+    free(mat->val);
+    free(mat->pos);
+    free(mat);
+}
