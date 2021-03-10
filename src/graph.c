@@ -102,7 +102,7 @@ void sort_neighbors(adjlist* g) {
 
 // Create a min heap with the nodes of the graph sorted by their degree
 void sort_nodes(adjlist *g) {
-	g->mh = alloc_min_heap(g->n);
+	if (!g->mh) g->mh = alloc_min_heap(g->n);
 	unsigned long i;
 	for (i = 0; i < g->n; i++) insert_node(g->mh, i, g->cd[i+1]-g->cd[i]);
 }
