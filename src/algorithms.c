@@ -13,7 +13,7 @@ void farthest_node(adjlist* g, unsigned long s, unsigned long* res_node, unsigne
     unsigned long i;
     while (!is_empty(queue)) {
         u = dequeue(queue);
-        for (i = g->cd[u]; i < g->cd[u+1]; i++) {
+        for (i = g->cd[u]; i < g->cd[u+1]; i++) { //for each neighbor of u
             v = g->adj[i];
             if (dist[v] == 0 && v != s) {
                 enqueue(v, queue);
@@ -33,9 +33,7 @@ unsigned long BFS_diameter(adjlist* g, unsigned int n_times) {
     unsigned int i;
     for (i = 0; i < n_times; i++) {
         farthest_node(g, node, &node, &dist);
-        if (diameter < dist) {
-            diameter = dist;
-        }
+        if (diameter < dist) diameter = dist;
     }
     return diameter;
 }
@@ -47,8 +45,8 @@ unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles) {
     unsigned long u;
     unsigned long i, k = 0, max_d = 0;
     ctd[0] = 0;
-    for (u = 0; u < g->n; u++) {
-        for (i = g->cd[u]; i < g->cd[u+1]; i++) {
+    for (u = 0; u < g->n; u++) { //for each node u
+        for (i = g->cd[u]; i < g->cd[u+1]; i++) { //for each neighbor of u
             if (g->adj[i] > u) {
                 tsl[k] = g->adj[i];
                 k++;
@@ -65,12 +63,12 @@ unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles) {
     unsigned long *triangles = malloc(maxt*sizeof(unsigned long));
     unsigned long *W = malloc(max_d*sizeof(unsigned long));
     *n_triangles = 0;
-    for (e = 0; e < g->e; e++) {
+    for (e = 0; e < g->e; e++) { //for each edge e
         u = g->edges[e].s;
         v = g->edges[e].t;
         intersection(tsl+ctd[u], ctd[u+1]-ctd[u], tsl+ctd[v], ctd[v+1]-ctd[v], W, &k);
         *n_triangles += k;
-        for (i = 0; i < k; i++) {
+        for (i = 0; i < k; i++) { //for each node in the intersection
             if (t+3 > maxt) {
                 maxt += 3*NTRIANGLES;
                 triangles = realloc(triangles, maxt*sizeof(unsigned long));
