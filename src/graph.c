@@ -111,7 +111,7 @@ void free_adjlist(adjlist* g) {
 	free(g->edges);
 	free(g->cd);
 	free(g->adj);
-	if (g->mh) free(g->mh);
+	if (g->mh) free_min_heap(g->mh);
 	free(g);
 }
 
