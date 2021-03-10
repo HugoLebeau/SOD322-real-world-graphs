@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "graph.h"
-#include "misc.h"
 
 // Compute the maximum of three unsigned long
 unsigned long max3(unsigned long a, unsigned long b, unsigned long c) {
@@ -39,7 +38,7 @@ void free_edgelist(edgelist* g) {
 	free(g);
 }
 
-// Read an edge list from file
+// Read an adjacency list from file
 adjlist* read_adjlist(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input, "r");
@@ -115,7 +114,7 @@ void free_adjlist(adjlist* g) {
 	free(g);
 }
 
-// Read an edgelist from file
+// Read an adjacency matrix from file
 adjmatrix* read_adjmatrix(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input, "r");
@@ -155,5 +154,47 @@ void mkmatrix(adjmatrix* g) {
 void free_adjmatrix(adjmatrix* g) {
 	free(g->edges);
 	free(g->mat);
+	free(g);
+}
+
+// Read a sparse oriented adjacency matrix from file
+spadjmatrix* read_spadjmatrix(char* input) {
+	unsigned long e1 = NLINKS;
+	FILE *file = fopen(input, "r");
+
+	spadjmatrix *g = malloc(sizeof(spadjmatrix));
+	g->n = 0;
+	g->e = 0;
+	g->edges = malloc(e1*sizeof(edge)); //allocate some RAM to store edges
+
+	while (fscanf(file, "%lu %lu", &(g->edges[g->e].s), &(g->edges[g->e].t)) == 2) {
+		g->n = max3(g->n, g->edges[g->e].s, g->edges[g->e].t);
+		if (++(g->e) == e1) { //increase allocated RAM if needed
+			e1 += NLINKS;
+			g->edges = realloc(g->edges, e1*sizeof(edge));
+		}
+	}
+	fclose(file);
+
+	g->n++;
+	g->edges = realloc(g->edges, g->e*sizeof(edge));
+
+	return g;
+}
+
+// Build a sparse oriented adjacency matrix
+void mkspmatrix(spadjmatrix* g) {
+	unsigned long i, u, v;
+	g->mat = alloc_sparse_matrix(g->e, g->n, g->n);
+	for (i = 0; i < g->e; i++) {
+		u = g->edges[i].s;
+		v = g->edges[i].t;
+		add_elem(g->mat, true, u, v);
+	}
+}
+
+void free_spadjmatrix(spadjmatrix* g) {
+	free(g->edges);
+	free_sparse_matrix(g->mat);
 	free(g);
 }

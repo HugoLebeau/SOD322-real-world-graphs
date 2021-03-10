@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "misc.h"
 #include "min_heap.h"
 
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
@@ -10,14 +11,14 @@ typedef struct {
 	unsigned long t;
 } edge;
 
-//edge list structure
+// Edge list structure
 typedef struct {
 	unsigned long n; //number of nodes
 	unsigned long e; //number of edges
 	edge *edges; //list of edges
 } edgelist;
 
-//adjacency list structure
+// Adjacency list structure
 typedef struct {
     unsigned long n; //number of nodes
 	unsigned long e; //number of edges
@@ -27,13 +28,21 @@ typedef struct {
 	min_heap *mh; //min heap of the nodes sorted by their degree (filled only if needed)
 } adjlist;
 
-//adjacency matrix structure
+// Adjacency matrix structure
 typedef struct {
 	unsigned long n; //number of nodes
 	unsigned long e; //number of edges
 	edge *edges; //list of edges
 	bool *mat; //adjacency matrix
 } adjmatrix;
+
+// Sparse adjacency matrix structure for ORIENTED graphs
+typedef struct {
+	unsigned long n; //number of nodes
+	unsigned long e; //number of edges
+	edge *edges; //list of edges
+	sparse_matrix *mat; //adjacency matrix
+} spadjmatrix;
 
 edgelist* read_edgelist(char* input);
 void free_edgelist(edgelist* g);
@@ -47,5 +56,9 @@ void free_adjlist(adjlist* g);
 adjmatrix* read_adjmatrix(char* input);
 void mkmatrix(adjmatrix* g);
 void free_adjmatrix(adjmatrix* g);
+
+spadjmatrix* read_spadjmatrix(char* input);
+void mkspmatrix(spadjmatrix* g);
+void free_spadjmatrix(spadjmatrix* g);
 
 #endif
