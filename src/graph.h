@@ -24,7 +24,7 @@ typedef struct {
 	edge *edges; //list of edges
 	unsigned long *cd; //cumulative degree cd[0]=0 length=n+1
 	unsigned long *adj; //concatenated list of neighbors of all nodes
-	min_heap *mh; //min heap of the nodes sorted by their degree
+	min_heap *mh; //min heap of the nodes sorted by their degree (filled only if needed)
 } adjlist;
 
 //adjacency matrix structure
