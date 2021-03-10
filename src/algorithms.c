@@ -103,3 +103,19 @@ void core_decomposition(adjlist* g, unsigned long* core_value, unsigned long* co
         i--;
     }
 }
+
+// Compute the average degree denstity and edge density of each densest core ordering prefix
+// add and ed are supposed to be two arrays of size g->n
+void densest_core_ordering_prefix(adjlist* g, unsigned long* core_ordering, double* add, double* ed) {
+    unsigned long p, degree, i;
+    double e = g->e, n = g->n;
+    unsigned long *delta = calloc(g->n, sizeof(unsigned long));
+    for (p = g->n-1; p > 0; p--) {
+        add[p] = e/n; //average degree density
+        ed[p] = 2.*e/(n*(n-1)); //edge density
+        n -= 1.; //remove one node
+        degree = g->cd[core_ordering[p]+1]-g->cd[core_ordering[p]]; //degree of the node removed
+        e -= (double) (degree-delta[core_ordering[p]]); //remove edges
+        for (i = g->cd[core_ordering[p]]; i < g->cd[core_ordering[p]+1]; i++) delta[g->adj[i]]++; //count edges not to be removed again
+    }
+}
