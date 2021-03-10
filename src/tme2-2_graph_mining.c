@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
     FILE *file = fopen("outputs/degree_coreness.csv", "w+");
     fprintf(file, "ID,Degree,Coreness\n");
     unsigned long i;
-    for (i = 0; i< g->n; i++)  fprintf(file, "%lu,%lu,%lu\n", i, g->cd[i+1]-g->cd[i], core_value[i]);
+    for (i = 0; i < g->n; i++)  fprintf(file, "%lu,%lu,%lu\n", i, g->cd[i+1]-g->cd[i], core_value[i]);
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
 
