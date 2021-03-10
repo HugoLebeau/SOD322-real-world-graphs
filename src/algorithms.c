@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "algorithms.h"
-#include "misc.h"
 #include "queue.h"
 
 // Compute the distance of the farthest node
@@ -118,4 +117,25 @@ void densest_core_ordering_prefix(adjlist* g, unsigned long* core_ordering, doub
         e -= (double) (degree-delta[core_ordering[p]]); //remove edges
         for (i = g->cd[core_ordering[p]]; i < g->cd[core_ordering[p]+1]; i++) delta[g->adj[i]]++; //count edges not to be removed again
     }
+}
+
+// Compute the page rank with the power iteration method
+double* power_iteration(spadjmatrix* g, double alpha, unsigned long t) {
+    double *P = malloc(g->n*sizeof(double));
+    double *P_buffer = malloc(g->n*sizeof(double));
+    unsigned long k, i;
+    double norm1, n = g->n;
+    for (i = 0; i < g->n; i++) P[i] = 1./n;
+    for (k = 0; k < t; k++) {
+        matvecprod(g->mat, P, P_buffer);
+        P = P_buffer;
+        norm1 = 0.;
+        for (i = 0; i < g->n; i++) {
+            P[i] = (1.-alpha)*P[i]+alpha;
+            norm1 += P[i];
+        }
+        for (i = 0; i < g->n; i++) P[i] += (1.-norm1)/n;
+    }
+    free(P_buffer);
+    return P;
 }

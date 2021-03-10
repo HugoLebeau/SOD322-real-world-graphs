@@ -9,5 +9,6 @@ unsigned long BFS_diameter(adjlist* g, unsigned int n_times);
 unsigned long* list_triangles(adjlist* g, unsigned long* n_triangles);
 void core_decomposition(adjlist* g, unsigned long* core_value, unsigned long* ordering);
 void densest_core_ordering_prefix(adjlist* g, unsigned long* core_ordering, double* add, double* ed);
+double* power_iteration(spadjmatrix* g, double alpha, unsigned long t);
 
 #endif
