@@ -94,9 +94,11 @@ void mkadjlist(adjlist* g) {
 // Sort the neighbors of each node by their label
 void sort_neighbors(adjlist* g) {
 	unsigned long i;
+	unsigned long* idx = malloc(2*g->e*sizeof(unsigned long)); // TEMPORARY FIX, TO BE UPDATED
 	for (i = 0; i < g->n; i++) {
-		if (g->cd[i+1] > g->cd[i]) quicksort(g->adj, g->cd[i], g->cd[i+1]-1);
+		if (g->cd[i+1] > g->cd[i]) quicksort(g->adj, idx, g->cd[i], g->cd[i+1]-1);
 	}
+	free(idx);
 }
 
 // Create a min heap with the nodes of the graph sorted by their degree
@@ -157,12 +159,12 @@ void free_adjmatrix(adjmatrix* g) {
 	free(g);
 }
 
-// Read a sparse oriented adjacency matrix from file
-spadjmatrix* read_spadjmatrix(char* input) {
+// Read a sparse oriented transition matrix from file
+sptmatrix* read_sptmatrix(char* input) {
 	unsigned long e1 = NLINKS;
 	FILE *file = fopen(input, "r");
 
-	spadjmatrix *g = malloc(sizeof(spadjmatrix));
+	sptmatrix *g = malloc(sizeof(sptmatrix));
 	g->n = 0;
 	g->e = 0;
 	g->edges = malloc(e1*sizeof(edge)); //allocate some RAM to store edges
@@ -182,18 +184,16 @@ spadjmatrix* read_spadjmatrix(char* input) {
 	return g;
 }
 
-// Build a sparse oriented adjacency matrix
-void mkspmatrix(spadjmatrix* g) {
-	unsigned long i, u, v;
+// Build a sparse oriented transition matrix
+void mksptmatrix(sptmatrix* g) {
+	unsigned long i;
+	double *d_out = calloc(g->n, sizeof(double));
+	for (i = 0; i < g->e; i++) d_out[g->edges[i].s] += 1.;
 	g->mat = alloc_sparse_matrix(g->e, g->n, g->n);
-	for (i = 0; i < g->e; i++) {
-		u = g->edges[i].s;
-		v = g->edges[i].t;
-		add_elem(g->mat, true, u, v);
-	}
+	for (i = 0; i < g->e; i++) add_elem(g->mat, 1./d_out[g->edges[i].s], g->edges[i].t, g->edges[i].s);
 }
 
-void free_spadjmatrix(spadjmatrix* g) {
+void free_sptmatrix(sptmatrix* g) {
 	free(g->edges);
 	free_sparse_matrix(g->mat);
 	free(g);

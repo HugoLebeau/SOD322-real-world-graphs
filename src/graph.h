@@ -36,13 +36,13 @@ typedef struct {
 	bool *mat; //adjacency matrix
 } adjmatrix;
 
-// Sparse adjacency matrix structure for ORIENTED graphs
+// Sparse transition matrix structure for ORIENTED graphs
 typedef struct {
 	unsigned long n; //number of nodes
 	unsigned long e; //number of edges
 	edge *edges; //list of edges
-	sparse_matrix *mat; //adjacency matrix
-} spadjmatrix;
+	sparse_matrix *mat; //transition matrix
+} sptmatrix;
 
 edgelist* read_edgelist(char* input);
 void free_edgelist(edgelist* g);
@@ -57,8 +57,8 @@ adjmatrix* read_adjmatrix(char* input);
 void mkmatrix(adjmatrix* g);
 void free_adjmatrix(adjmatrix* g);
 
-spadjmatrix* read_spadjmatrix(char* input);
-void mkspmatrix(spadjmatrix* g);
-void free_spadjmatrix(spadjmatrix* g);
+sptmatrix* read_sptmatrix(char* input);
+void mksptmatrix(sptmatrix* g);
+void free_sptmatrix(sptmatrix* g);
 
 #endif
