@@ -14,25 +14,27 @@ void swap_lu(unsigned long* array, unsigned long i, unsigned long j) {
 }
 
 // Partition function of the quicksort
-unsigned long partition(unsigned long* array, unsigned long first, unsigned long last) {
+unsigned long partition(unsigned long* array, unsigned long* idx, unsigned long first, unsigned long last) {
     unsigned long pivot = array[last];
     unsigned long i = first, j;
     for (j = first; j <= last; j++) {
         if (array[j] < pivot) {
             swap_lu(array, i, j);
+            swap_lu(idx, i, j);
             i++;
         }
     }
     swap_lu(array, i, last);
+    swap_lu(idx, i, last);
     return i;
 }
 
 // Quicksort of an array
-void quicksort(unsigned long* array, unsigned long first, unsigned long last) {
+void quicksort(unsigned long* array, unsigned long* idx, unsigned long first, unsigned long last) {
     if (first < last) {
-        unsigned long p = partition(array, first, last);
-        quicksort(array, first, p-1);
-        quicksort(array, p+1, last);
+        unsigned long p = partition(array, idx, first, last);
+        if (p >= 1) quicksort(array, idx, first, p-1);
+        quicksort(array, idx, p+1, last);
     }
 }
 
@@ -57,24 +59,29 @@ sparse_matrix* alloc_sparse_matrix(unsigned long capacity, unsigned long n, unsi
     mat->capacity = capacity;
     mat->n = n;
     mat->p = p;
-    mat->val = malloc(capacity*sizeof(unsigned long));
+    mat->val = malloc(capacity*sizeof(double));
     mat->pos = malloc(capacity*sizeof(unsigned long));
     return mat;
 }
 
-void add_elem(sparse_matrix* mat, bool elem, unsigned long i, unsigned long j) {
+void add_elem(sparse_matrix* mat, double elem, unsigned long i, unsigned long j) {
+    if (mat->n_elems >= mat->capacity) {
+        printf("Sparse matrix reached maximum capacity. Cannot add element.\n");
+        return;
+    }
     mat->val[mat->n_elems] = elem;
-    mat->pos[mat->n_elems] = mat->n*i+j;
+    mat->pos[mat->n_elems] = mat->p*i+j;
     mat->n_elems++;
 }
 
 // Matrix vector product with a sparse matrix
 void matvecprod(sparse_matrix* mat, double* vec, double* res) {
-    unsigned long j, k;
-    for (k = 0; k < mat->p; k++) res[k] = 0;
+    unsigned long i, j, k;
+    for (i = 0; i < mat->p; i++) res[i] = 0.;
     for (k = 0; k < mat->n_elems; k++) {
+        i = mat->pos[k]/mat->p;
         j = mat->pos[k]%mat->p;
-        if (mat->val[k]) res[j] += vec[j];
+        res[i] += mat->val[k]*vec[j];
     }
 }
 
