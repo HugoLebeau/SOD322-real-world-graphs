@@ -119,23 +119,30 @@ void densest_core_ordering_prefix(adjlist* g, unsigned long* core_ordering, doub
     }
 }
 
+void swap_pdouble(double** a, double** b) {
+    double *buffer;
+    buffer = *a;
+    *a = *b;
+    *b = buffer;
+}
+
 // Compute the page rank with the power iteration method
-double* power_iteration(spadjmatrix* g, double alpha, unsigned long t) {
+double* power_iteration(sptmatrix* g, double alpha, unsigned long t) {
     double *P = malloc(g->n*sizeof(double));
-    double *P_buffer = malloc(g->n*sizeof(double));
+    double *P_res = malloc(g->n*sizeof(double));
     unsigned long k, i;
     double norm1, n = g->n;
     for (i = 0; i < g->n; i++) P[i] = 1./n;
     for (k = 0; k < t; k++) {
-        matvecprod(g->mat, P, P_buffer);
-        P = P_buffer;
+        matvecprod(g->mat, P, P_res);
+        swap_pdouble(&P, &P_res);
         norm1 = 0.;
         for (i = 0; i < g->n; i++) {
-            P[i] = (1.-alpha)*P[i]+alpha;
+            P[i] = (1.-alpha)*P[i]+alpha/n;
             norm1 += P[i];
         }
         for (i = 0; i < g->n; i++) P[i] += (1.-norm1)/n;
     }
-    free(P_buffer);
+    free(P_res);
     return P;
 }
