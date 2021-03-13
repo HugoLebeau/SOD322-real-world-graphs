@@ -10,7 +10,8 @@ typedef struct {
     unsigned long capacity; //maximum number of elements
     unsigned long n, p; //dimensions
     double *val; //value of each element
-    unsigned long *pos; //position of each element
+    unsigned long *row; //row of each element
+    unsigned long *col; //column of each element
 } sparse_matrix;
 
 sparse_matrix* alloc_sparse_matrix(unsigned long capacity, unsigned long n, unsigned long p);

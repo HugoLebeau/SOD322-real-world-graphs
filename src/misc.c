@@ -60,7 +60,8 @@ sparse_matrix* alloc_sparse_matrix(unsigned long capacity, unsigned long n, unsi
     mat->n = n;
     mat->p = p;
     mat->val = malloc(capacity*sizeof(double));
-    mat->pos = malloc(capacity*sizeof(unsigned long));
+    mat->row = malloc(capacity*sizeof(unsigned long));
+    mat->col = malloc(capacity*sizeof(unsigned long));
     return mat;
 }
 
@@ -70,23 +71,21 @@ void add_elem(sparse_matrix* mat, double elem, unsigned long i, unsigned long j)
         return;
     }
     mat->val[mat->n_elems] = elem;
-    mat->pos[mat->n_elems] = mat->p*i+j;
+    mat->row[mat->n_elems] = i;
+    mat->col[mat->n_elems] = j;
     mat->n_elems++;
 }
 
 // Matrix vector product with a sparse matrix
 void matvecprod(sparse_matrix* mat, double* vec, double* res) {
-    unsigned long i, j, k;
-    for (i = 0; i < mat->p; i++) res[i] = 0.;
-    for (k = 0; k < mat->n_elems; k++) {
-        i = mat->pos[k]/mat->p;
-        j = mat->pos[k]%mat->p;
-        res[i] += mat->val[k]*vec[j];
-    }
+    unsigned long k;
+    for (k = 0; k < mat->p; k++) res[k] = 0.;
+    for (k = 0; k < mat->n_elems; k++) res[mat->row[k]] += mat->val[k]*vec[mat->col[k]];
 }
 
 void free_sparse_matrix(sparse_matrix* mat) {
     free(mat->val);
-    free(mat->pos);
+    free(mat->row);
+    free(mat->col);
     free(mat);
 }
