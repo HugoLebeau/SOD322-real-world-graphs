@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <float.h>
 #include <string.h>
 #include <time.h>
 #include "algorithms.h"
@@ -20,11 +21,14 @@ int main(int argc, char** argv) {
 	printf("Done. Time: %lus.\nNumber of nodes: %lu.\nNumber of edges: %lu.\n", (unsigned long) difftime(t2, t1), g->n, g->e);
 
     double **P = malloc(5*sizeof(double*));
+    double *P0 = malloc(g->n*sizeof(double));
     unsigned long i, j;
+    double n  = g->n;
+    for (i = 0; i < g->n; i++) P0[i] = 1./n; //regular page rank
     for (i = 0; i < 5; i++) {
         printf("Computing the PageRank with alpha=%.2f and t=%lu...\n", alpha[i], t);
         t1 = time(NULL);
-        P[i] = power_iteration(g, alpha[i], t);
+        P[i] = power_iteration(g, alpha[i], t, P0);
         t2 = time(NULL);
         printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
     }
@@ -48,7 +52,7 @@ int main(int argc, char** argv) {
     fprintf(file, "\n");
     for (i = 0; i < g->n; i++) {
         fprintf(file, "%lu,%lu,%lu", i, d_in[i], d_out[i]);
-        for (j = 0; j < 5; j++) fprintf(file, ",%f", P[j][i]);
+        for (j = 0; j < 5; j++) fprintf(file, ",%.*e", DECIMAL_DIG, P[j][i]);
         fprintf(file, "\n");
     }
     fclose(file);
@@ -57,5 +61,6 @@ int main(int argc, char** argv) {
 
     for (i = 0; i < 5; i++) free(P[i]);
     free(P);
+    free(P0);
 	free_sptmatrix(g);
 }

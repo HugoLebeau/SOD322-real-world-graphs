@@ -126,8 +126,8 @@ void swap_pdouble(double** a, double** b) {
     *b = buffer;
 }
 
-// Compute the page rank with the power iteration method
-double* power_iteration(sptmatrix* g, double alpha, unsigned long t) {
+// Compute the (personalized) PageRank with the power iteration method
+double* power_iteration(sptmatrix* g, double alpha, unsigned long t, double* P0) {
     double *P = malloc(g->n*sizeof(double));
     double *P_res = malloc(g->n*sizeof(double));
     unsigned long k, i;
@@ -138,10 +138,10 @@ double* power_iteration(sptmatrix* g, double alpha, unsigned long t) {
         swap_pdouble(&P, &P_res);
         norm1 = 0.;
         for (i = 0; i < g->n; i++) {
-            P[i] = (1.-alpha)*P[i]+alpha/n;
+            P[i] = (1.-alpha)*P[i]+alpha*P0[i];
             norm1 += P[i];
         }
-        for (i = 0; i < g->n; i++) P[i] += (1.-norm1)/n;
+        for (i = 0; i < g->n; i++) P[i] += P0[i]*(1.-norm1);
     }
     free(P_res);
     return P;
