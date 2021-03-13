@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
     fprintf(file, "ID,Degree,Coreness\n");
     unsigned long i;
     for (i = 0; i < g->n; i++)  fprintf(file, "%lu,%lu,%lu\n", i, g->cd[i+1]-g->cd[i], core_value[i]);
+    fclose(file);
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
 

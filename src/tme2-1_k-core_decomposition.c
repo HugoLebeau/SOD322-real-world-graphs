@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
     fprintf(file, "Size,Average degree density,Edge density\n");
     unsigned long p;
     for (p = 0; p < g->n; p++)  fprintf(file, "%lu,%f,%f\n", p+1, add[p], ed[p]);
+    fclose(file);
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
 
