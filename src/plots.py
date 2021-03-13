@@ -38,62 +38,55 @@ print(ID.loc[df[df["Coreness"] == 14]["ID"].values])
 
 # %% tme3-1&2 PageRank
 
-df = pd.read_csv("../outputs/page_rank.csv")
-num2name = pd.read_csv("../data/alr21--pageNum2Name--enwiki-20071018.txt", sep=None, engine='python', header=None, index_col=0)
-num2name.columns = ['ID']
-df = df.loc[num2name.index]
-df.index = num2name['ID']
+pagerank = pd.read_csv("../outputs/page_rank_enwiki.csv")
+page_num2name = pd.read_csv("../data/alr21--pageNum2Name--enwiki-20071018.txt", sep=None, engine='python', header=None, index_col=0)
+page_num2name.columns = ["ID"]
+page_num2name.index.name = "Page"
+pagerank = pagerank.loc[page_num2name.index]
+pagerank.index = page_num2name["ID"]
 
 print("\nLargest PageRank:")
-print(df["0.15"].nlargest(5))
+print(pagerank["0.15"].nlargest(5))
 print("\nSmallest PageRank:")
-print(df["0.15"].nsmallest(5))
-print("\nSmallest positive PageRank:")
-print(df[df["0.15"] > 0.]["0.15"].nsmallest(5))
+print(pagerank["0.15"].nsmallest(5))
 
-mask = df["0.15"] > 0.
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["In-degree"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["In-degree"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel("log In-degree")
 plt.show()
 
-mask = df["0.15"] > 0.
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["Out-degree"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["Out-degree"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel("log Out-degree")
 plt.show()
 
-mask = (df["0.15"] > 0.) & (df["0.10"] > 0.)
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["0.10"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["0.10"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel(r"log PageRank $\alpha = 0.10$")
 plt.show()
 
-mask = (df["0.15"] > 0.) & (df["0.20"] > 0.)
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["0.20"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["0.20"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel(r"log PageRank $\alpha = 0.20$")
 plt.show()
 
-mask = (df["0.15"] > 0.) & (df["0.50"] > 0.)
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["0.50"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["0.50"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel(r"log PageRank $\alpha = 0.50$")
 plt.show()
 
-mask = (df["0.15"] > 0.) & (df["0.90"] > 0.)
-plt.scatter(np.log(df[mask]["0.15"]), np.log(df[mask]["0.90"]))
+plt.scatter(np.log(pagerank["0.15"]), np.log(pagerank["0.90"]), s=3)
 plt.grid(ls=':')
 plt.xlabel(r"log PageRank $\alpha = 0.15$")
 plt.ylabel(r"log PageRank $\alpha = 0.90$")
 plt.show()
 
-matcorr = df[["In-degree", "Out-degree", "0.15", "0.10", "0.20", "0.50", "0.90"]].corr()
+matcorr = pagerank[["In-degree", "Out-degree", "0.15", "0.10", "0.20", "0.50", "0.90"]].corr()
 dic = {"0.15": r"PageRank $\alpha = 0.15$",
        "0.10": r"PageRank $\alpha = 0.10$",
        "0.20": r"PageRank $\alpha = 0.20$",
@@ -110,4 +103,35 @@ for i in xticks:
     for j in yticks:
         plt.text(i, j, matcorr.iloc[j, i].round(2), ha='center', va='center', fontsize='large')
 plt.title("Correlations")
+plt.show()
+
+# %% tme3-3 Rooted PageRank
+
+rootedpagerank = pd.read_csv("../outputs/rooted_page_rank_Magnus_Carlsen.csv")
+rootedpagerank.sort_values(by="RootedPageRank", ascending=False, inplace=True)
+
+categ_num2name = pd.read_csv("../data/alr21--categNum2Name--enwiki-20071018.txt", sep=None, engine='python', header=None, index_col=0)
+categ_num2name.columns = ["Category"]
+categ_num2name.index.name = "ID"
+
+categ = pd.read_csv("../data/alr21--pageCategList--enwiki--20071018.txt", sep=None, engine='python', header=None, index_col=0)
+categ.columns = ["Categories"]
+categ.index.name = 'Page'
+categ["Categories"] = categ["Categories"].apply(lambda x: x.split(' ') if x else [])
+categ["Categories"] = categ["Categories"].apply(lambda x: [int(c) for c in x])
+
+sorted_pagerank = pagerank.sort_values(by="0.15", ascending=False)
+id_chess = set(categ_num2name[categ_num2name["Category"].apply(lambda x : "chess" in x or "Chess" in x)].index)
+chess_pages = categ["Categories"].apply(lambda x: len(id_chess.intersection(x)) > 0)
+
+mask = rootedpagerank["RootedPageRank"] > 1e-5
+plt.plot(rootedpagerank[mask]["RootedPageRank"].values)
+plt.xlim(left=1)
+plt.grid(ls=':')
+plt.xscale('log')
+plt.yscale('log')
+plt.show()
+
+plt.plot(chess_pages.loc[sorted_pagerank["Node"]].cumsum().values)
+plt.xscale('log')
 plt.show()
