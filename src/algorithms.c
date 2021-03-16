@@ -145,3 +145,32 @@ double* power_iteration(sptmatrix* g, double alpha, unsigned long t, double* P0)
     free(P_res);
     return P;
 }
+
+adjlist* gen_graph(unsigned long n_clusters, unsigned long n_nodes_per_cluster, double p, double q) {
+    unsigned long e1 = NLINKS, u, v;
+    adjlist *g = malloc(sizeof(adjlist));
+    g->n = n_clusters*n_nodes_per_cluster;
+    g->e = 0;
+    g->edges = malloc(e1*sizeof(edge));
+    bool add_edge = false;
+    for (u = 0; u < g->n; u++) {
+        for (v = u+1; v < g->n; v++) {
+            if (u%n_clusters == v%n_clusters) { //same cluster
+                if (rand() <= p*RAND_MAX) add_edge = true;
+            }
+            else if (rand() <= q*RAND_MAX) add_edge = true;
+            if (add_edge) {
+                g->edges[g->e].s = u;
+                g->edges[g->e].t = v;
+                if (++(g->e) == e1) { //increase allocated RAM if needed
+                    e1 += NLINKS;
+                    g->edges = realloc(g->edges, e1*sizeof(edge));
+                }
+                add_edge = false;
+            }
+        }
+    }
+    g->edges = realloc(g->edges, g->e*sizeof(edge));
+    mkadjlist(g);
+    return g;
+}
