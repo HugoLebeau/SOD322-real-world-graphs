@@ -120,8 +120,7 @@ void densest_core_ordering_prefix(adjlist* g, unsigned long* core_ordering, doub
 }
 
 void swap_pdouble(double** a, double** b) {
-    double *buffer;
-    buffer = *a;
+    double *buffer = *a;
     *a = *b;
     *b = buffer;
 }
