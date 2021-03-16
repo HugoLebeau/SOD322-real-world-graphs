@@ -53,4 +53,6 @@ int main(int argc, char** argv) {
     free(add);
     free(ed);
 	free_adjlist(g);
+
+    return 0;
 }

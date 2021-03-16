@@ -43,4 +43,6 @@ int main(int argc, char** argv) {
     free(core_value);
     free(core_ordering);
 	free_adjlist(g);
+
+    return 0;
 }

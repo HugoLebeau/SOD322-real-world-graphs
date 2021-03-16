@@ -42,4 +42,6 @@ int main(int argc, char** argv) {
     free(P);
     free(P0);
 	free_sptmatrix(g);
+
+    return 0;
 }
