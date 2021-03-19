@@ -10,8 +10,8 @@ int main(int argc, char** argv) {
 
     unsigned long n_clusters = 4;
     unsigned long n_nodes_per_cluster = 100;
-    double p = 0.9;
-    double q = 0.01;
+    double p = 0.5;
+    double q = 0.05;
 
     printf("Generating graph...\n");
     t1 = time(NULL);
