@@ -44,11 +44,15 @@ unsigned long partitionby(unsigned long* array, unsigned long* by, unsigned long
     unsigned long i = first, j;
     for (j = first; j <= last; j++) {
         if (by[array[j]] < pivot) {
+            printf("a");
             swap_lu(array, i, j);
+            printf("b");
             i++;
         }
     }
+    printf("c");
     swap_lu(array, i, last);
+    printf("d");
     return i;
 }
 
@@ -114,10 +118,11 @@ void free_sparse_matrix(sparse_matrix* mat) {
 }
 
 unsigned long randlu(unsigned long maxi) {
-    if (maxi > RAND_MAX) printf("Upper bound too big, generating random number in [0, %d].", RAND_MAX);
-    maxi = maxi > RAND_MAX ? RAND_MAX : maxi;
+    unsigned long rmax = RAND_MAX;
+    if (maxi > rmax) printf("Upper bound too big, generating random number in [0, %lu].", rmax);
+    maxi = maxi > rmax ? rmax : maxi;
     unsigned long out = rand();
-    unsigned long m = (RAND_MAX+1)/(maxi+1);
+    unsigned long m = (rmax+1)/(maxi+1);
     while (out > m*(maxi+1)-1) out = rand();
     return out%(maxi+1);
 }
