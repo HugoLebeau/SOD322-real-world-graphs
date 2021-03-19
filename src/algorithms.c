@@ -174,3 +174,45 @@ adjlist* gen_graph(unsigned long n_clusters, unsigned long n_nodes_per_cluster, 
     mkadjlist(g);
     return g;
 }
+
+unsigned long* label_propagation(adjlist* g) {
+    unsigned long *label = malloc(g->n*sizeof(unsigned long));
+    unsigned long i, j, k;
+    unsigned long freq, most_frequent_label;
+    for (i = 0; i < g->n; i++) label[i] = i; //give a unique label to each node in the network
+    Fisher_Yates_shuffle(label, g->n); //arrange the nodes in the network in a random order
+    bool stop = false; //stop = true iff no label change
+    while (!stop) {
+        stop = true;
+        for (i = 0; i < g->n; i++) {
+            if (g->cd[i+1] > g->cd[i]) {
+                quicksortby(g->adj, label, g->cd[i], g->cd[i+1]-1); //sort neighbors by label
+                j = g->cd[i]; //first neighbor
+                freq = 0;
+                most_frequent_label = label[g->adj[j]];
+                k = 1;
+                if (label[g->adj[j]] == label[i]) k++;
+                for (j = g->cd[i]+1; j < g->cd[i+1]; j++) { //seek the most frequent label
+                    if (label[g->adj[j]] == label[g->adj[j-1]]) k++;
+                    else {
+                        if (k > freq) {
+                            freq = k;
+                            most_frequent_label = label[g->adj[j-1]];
+                        }
+                        k = 1;
+                        if (label[g->adj[j]] == label[i]) k++;
+                    }
+                }
+                if (k > freq) {
+                    freq = k;
+                    most_frequent_label = label[g->adj[g->cd[i+1]-1]];
+                }
+                if (label[i] != most_frequent_label) {
+                    stop = false;
+                    label[i] = most_frequent_label;
+                }
+            }
+        }
+    }
+    return label;
+}
