@@ -3,6 +3,7 @@
 
 unsigned long max(unsigned long a, unsigned long b);
 void quicksort(unsigned long* array, unsigned long* idx, unsigned long first, unsigned long last);
+void quicksortby(unsigned long* array, unsigned long* by, unsigned long first, unsigned long last);
 void intersection(unsigned long* sorted_a, unsigned long size_a, unsigned long* sorted_b, unsigned long size_b, unsigned long* inter, unsigned long* size_inter);
 
 typedef struct {
@@ -18,5 +19,7 @@ sparse_matrix* alloc_sparse_matrix(unsigned long capacity, unsigned long n, unsi
 void add_elem(sparse_matrix* mat, double elem, unsigned long i, unsigned long j);
 void matvecprod(sparse_matrix* mat, double* vec, double* res);
 void free_sparse_matrix(sparse_matrix* mat);
+
+void Fisher_Yates_shuffle(unsigned long* array, unsigned long size);
 
 #endif

@@ -33,8 +33,31 @@ unsigned long partition(unsigned long* array, unsigned long* idx, unsigned long 
 void quicksort(unsigned long* array, unsigned long* idx, unsigned long first, unsigned long last) {
     if (first < last) {
         unsigned long p = partition(array, idx, first, last);
-        if (p >= 1) quicksort(array, idx, first, p-1);
+        quicksort(array, idx, first, p-1);
         quicksort(array, idx, p+1, last);
+    }
+}
+
+// Partition function of the quicksort
+unsigned long partitionby(unsigned long* array, unsigned long* by, unsigned long first, unsigned long last) {
+    unsigned long pivot = by[array[last]];
+    unsigned long i = first, j;
+    for (j = first; j <= last; j++) {
+        if (by[array[j]] < pivot) {
+            swap_lu(array, i, j);
+            i++;
+        }
+    }
+    swap_lu(array, i, last);
+    return i;
+}
+
+// Quicksort of an array
+void quicksortby(unsigned long* array, unsigned long* by, unsigned long first, unsigned long last) {
+    if (first < last) {
+        unsigned long p = partitionby(array, by, first, last);
+        quicksortby(array, by, first, p-1);
+        quicksortby(array, by, p+1, last);
     }
 }
 
@@ -88,4 +111,21 @@ void free_sparse_matrix(sparse_matrix* mat) {
     free(mat->row);
     free(mat->col);
     free(mat);
+}
+
+unsigned long randlu(unsigned long maxi) {
+    if (maxi > RAND_MAX) printf("Upper bound too big, generating random number in [0, %d].", RAND_MAX);
+    maxi = maxi > RAND_MAX ? RAND_MAX : maxi;
+    unsigned long out = rand();
+    unsigned long m = (RAND_MAX+1)/(maxi+1);
+    while (out > m*(maxi+1)-1) out = rand();
+    return out%(maxi+1);
+}
+
+void Fisher_Yates_shuffle(unsigned long* array, unsigned long size) {
+    unsigned long i, j;
+    for (i = size-1; i >= 1; i--) {
+        j = randlu(i);
+        swap_lu(array, i, j);
+    }
 }
