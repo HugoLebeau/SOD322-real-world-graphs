@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
 
     double *P;
     double *P0 = calloc(g->n, sizeof(double));
-    P0[atoi(argv[2])] = 1.;
+    unsigned long i;
+    for (i = 0; i < atoi(argv[2]); i++) P0[atoi(argv[3+i])] = 1./atof(argv[2]);
     printf("Computing the PageRank with alpha=%.2f and t=%lu...\n", alpha, t);
     t1 = time(NULL);
     P = power_iteration(g, alpha, t, P0);
@@ -33,7 +34,6 @@ int main(int argc, char** argv) {
     t1 = time(NULL);
     FILE *file = fopen("outputs/rooted_page_rank.csv", "w+");
     fprintf(file, "Node,RootedPageRank\n");
-    unsigned long i;
     for (i = 0; i < g->n; i++) fprintf(file, "%lu,%.*e\n", i, DECIMAL_DIG, P[i]);
     fclose(file);
     t2 = time(NULL);
