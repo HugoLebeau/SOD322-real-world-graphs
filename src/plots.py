@@ -152,14 +152,48 @@ print(chess_boxing[:20])
 
 # %% tme4-1
 
-G = nx.read_edgelist("../outputs/gen_graph_0.5_0.01.csv")
-nx.draw(G, arrows=False, node_size=50)
-plt.title(r"$p = 0.5$   $q = 0.01$")
-
 G = nx.read_edgelist("../outputs/gen_graph_0.5_0.1.csv")
 nx.draw(G, arrows=False, node_size=50)
 plt.title(r"$p = 0.5$   $q = 0.1$")
+plt.show()
+
+G = nx.read_edgelist("../outputs/gen_graph_0.5_0.05.csv")
+nx.draw(G, arrows=False, node_size=50)
+plt.title(r"$p = 0.5$   $q = 0.05$")
+plt.show()
+
+G = nx.read_edgelist("../outputs/gen_graph_0.5_0.01.csv")
+nx.draw(G, arrows=False, node_size=50)
+plt.title(r"$p = 0.5$   $q = 0.01$")
+plt.show()
 
 G = nx.read_edgelist("../outputs/gen_graph_0.9_0.01.csv")
 nx.draw(G, arrows=False, node_size=50)
 plt.title(r"$p = 0.9$   $q = 0.01$")
+plt.show()
+
+# %% tme4-2
+
+labels = pd.read_csv("../outputs/labels_0.5_0.1.csv", index_col=0)
+G = nx.read_edgelist("../outputs/gen_graph_0.5_0.1.csv")
+nx.draw(G, arrows=False, node_size=50, node_color=labels["Label"][np.array(G.nodes, dtype=np.int)])
+plt.title(r"$p = 0.5$   $q = 0.1$")
+plt.show()
+
+labels = pd.read_csv("../outputs/labels_0.5_0.05.csv", index_col=0)
+G = nx.read_edgelist("../outputs/gen_graph_0.5_0.05.csv")
+nx.draw(G, arrows=False, node_size=50, node_color=labels["Label"][np.array(G.nodes, dtype=np.int)])
+plt.title(r"$p = 0.5$   $q = 0.05$")
+plt.show()
+
+labels = pd.read_csv("../outputs/labels_0.5_0.01.csv", index_col=0)
+G = nx.read_edgelist("../outputs/gen_graph_0.5_0.01.csv")
+nx.draw(G, arrows=False, node_size=50, node_color=labels["Label"][np.array(G.nodes, dtype=np.int)])
+plt.title(r"$p = 0.5$   $q = 0.01$")
+plt.show()
+
+labels = pd.read_csv("../outputs/labels_0.9_0.01.csv", index_col=0)
+G = nx.read_edgelist("../outputs/gen_graph_0.9_0.01.csv")
+nx.draw(G, arrows=False, node_size=50, node_color=labels["Label"][np.array(G.nodes, dtype=np.int)])
+plt.title(r"$p = 0.9$   $q = 0.01$")
+plt.show()
