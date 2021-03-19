@@ -33,7 +33,7 @@ unsigned long partition(unsigned long* array, unsigned long* idx, unsigned long 
 void quicksort(unsigned long* array, unsigned long* idx, unsigned long first, unsigned long last) {
     if (first < last) {
         unsigned long p = partition(array, idx, first, last);
-        quicksort(array, idx, first, p-1);
+        if (p > 0) quicksort(array, idx, first, p-1);
         quicksort(array, idx, p+1, last);
     }
 }
@@ -44,15 +44,11 @@ unsigned long partitionby(unsigned long* array, unsigned long* by, unsigned long
     unsigned long i = first, j;
     for (j = first; j <= last; j++) {
         if (by[array[j]] < pivot) {
-            printf("a");
             swap_lu(array, i, j);
-            printf("b");
             i++;
         }
     }
-    printf("c");
     swap_lu(array, i, last);
-    printf("d");
     return i;
 }
 
@@ -60,7 +56,7 @@ unsigned long partitionby(unsigned long* array, unsigned long* by, unsigned long
 void quicksortby(unsigned long* array, unsigned long* by, unsigned long first, unsigned long last) {
     if (first < last) {
         unsigned long p = partitionby(array, by, first, last);
-        quicksortby(array, by, first, p-1);
+        if (p > 0) quicksortby(array, by, first, p-1);
         quicksortby(array, by, p+1, last);
     }
 }
