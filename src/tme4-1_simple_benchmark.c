@@ -10,8 +10,8 @@ int main(int argc, char** argv) {
 
     unsigned long n_clusters = 4;
     unsigned long n_nodes_per_cluster = 100;
-    double p = 0.8;
-    double q = 0.2;
+    double p = 0.9;
+    double q = 0.01;
 
     printf("Generating graph...\n");
     t1 = time(NULL);
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     t1 = time(NULL);
     FILE *file = fopen("outputs/gen_graph.csv", "w+");
     unsigned long i;
-    for (i = 0; i < g->e; i++)  fprintf(file, "%lu %lu\n", g->edges[i].s, g->edges[i].t);
+    for (i = 0; i < g->e; i++) fprintf(file, "%lu %lu\n", g->edges[i].s, g->edges[i].t);
     fclose(file);
     t2 = time(NULL);
     printf("Done. Time: %lus.\n", (unsigned long) difftime(t2, t1));
