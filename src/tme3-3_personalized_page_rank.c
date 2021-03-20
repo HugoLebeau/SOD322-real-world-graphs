@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     double *P;
     double *P0 = calloc(g->n, sizeof(double));
     unsigned long i;
-    for (i = 0; i < atoi(argv[2]); i++) P0[atoi(argv[3+i])] = 1./atof(argv[2]);
+    for (i = 2; i < argc; i++) P0[atoi(argv[i])] = 1./((double) (argc-2));
     printf("Computing the PageRank with alpha=%.2f and t=%lu...\n", alpha, t);
     t1 = time(NULL);
     P = power_iteration(g, alpha, t, P0);
