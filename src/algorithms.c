@@ -146,6 +146,8 @@ double* power_iteration(sptmatrix* g, double alpha, unsigned long t, double* P0)
     return P;
 }
 
+
+// Generate a clustered graph with p and q as in- and out-cluster connection probability
 adjlist* gen_graph(unsigned long n_clusters, unsigned long n_nodes_per_cluster, double p, double q) {
     unsigned long e1 = NLINKS, u, v;
     adjlist *g = malloc(sizeof(adjlist));
@@ -175,6 +177,7 @@ adjlist* gen_graph(unsigned long n_clusters, unsigned long n_nodes_per_cluster, 
     return g;
 }
 
+// Label propagation algorithm
 unsigned long* label_propagation(adjlist* g) {
     unsigned long *label = malloc(g->n*sizeof(unsigned long));
     unsigned long i, j, k;
