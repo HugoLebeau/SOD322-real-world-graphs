@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 
 # %% tme2-1 Average degree density and Edge density
 
@@ -198,7 +199,7 @@ nx.draw(G, arrows=False, node_size=50, node_color=labels["Label"][np.array(G.nod
 plt.title(r"$p = 0.9$   $q = 0.01$   Label propagation")
 plt.show()
 
-# %% tme4-3
+# %% tme4-3 Plots
 
 labels = pd.read_csv("../outputs/louvain_0.5_0.1.csv", index_col=0, sep=' ', header=None)
 G = nx.read_edgelist("../outputs/gen_graph_0.5_0.1.csv")
@@ -223,3 +224,29 @@ G = nx.read_edgelist("../outputs/gen_graph_0.9_0.01.csv")
 nx.draw(G, arrows=False, node_size=50, node_color=labels[1][np.array(G.nodes, dtype=np.int)])
 plt.title(r"$p = 0.9$   $q = 0.01$   Louvain algorithm")
 plt.show()
+
+# %% tme4-3 Compute ARI and NMI
+
+res_labelprop = pd.DataFrame(index=["0.5_0.1", "0.5_0.05", "0.5_0.01", "0.9_0.01", "500", "1000", "10000", "50000"], columns=["ARI", "NMI"])
+res_louvain = pd.DataFrame(index=["0.5_0.1", "0.5_0.05", "0.5_0.01", "0.9_0.01", "500", "1000", "10000", "50000"], columns=["ARI", "NMI"])
+
+for idx in ["0.5_0.1", "0.5_0.05", "0.5_0.01", "0.9_0.01"]:
+    labels = np.arange(400)%4
+    labelprop = pd.read_csv("../outputs/labels_"+idx+".csv", index_col=0)["Label"].values
+    louvain = pd.read_csv("../outputs/louvain_"+idx+".csv", index_col=0, sep=' ', header=None)[1].values
+    res_labelprop.loc[idx, "ARI"] = adjusted_rand_score(labels, labelprop)
+    res_labelprop.loc[idx, "NMI"] = normalized_mutual_info_score(labels, labelprop)
+    res_louvain.loc[idx, "ARI"] = adjusted_rand_score(labels, louvain)
+    res_louvain.loc[idx, "NMI"] = normalized_mutual_info_score(labels, louvain)
+
+for idx in ["500", "1000", "10000", "50000"]:
+    labels = pd.read_csv("../outputs/community_"+idx+".dat", sep='\t', header=None)[1].values
+    labelprop = pd.read_csv("../outputs/labels_"+idx+".csv", index_col=0)["Label"].values[1:]
+    louvain = pd.read_csv("../outputs/louvain_"+idx+".csv", index_col=0, sep=' ', header=None)[1].values[1:]
+    res_labelprop.loc[idx, "ARI"] = adjusted_rand_score(labels, labelprop)
+    res_labelprop.loc[idx, "NMI"] = normalized_mutual_info_score(labels, labelprop)
+    res_louvain.loc[idx, "ARI"] = adjusted_rand_score(labels, louvain)
+    res_louvain.loc[idx, "NMI"] = normalized_mutual_info_score(labels, louvain)
+
+print(res_labelprop)
+print(res_louvain)
