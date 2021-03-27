@@ -8,12 +8,12 @@ int main(int argc, char** argv) {
 	adjlist *g;
     time_t t1, t2;
 
-    unsigned long n_clusters = 4;
-    unsigned long n_nodes_per_cluster = 100;
-    double p = 0.5;
-    double q = 0.05;
-
-    printf("Generating graph...\n");
+    unsigned long n_clusters = atoi(argv[1]);
+    unsigned long n_nodes_per_cluster = atoi(argv[2]);
+    double p = atof(argv[3]);
+    double q = atof(argv[4]);
+    
+    printf("Generating graph with %lu clusters, %lu nodes per cluster, p=%f and q=%f...\n", n_clusters, n_nodes_per_cluster, p, q);
     t1 = time(NULL);
     g = gen_graph(n_clusters, n_nodes_per_cluster, p, q);
     t2 = time(NULL);
